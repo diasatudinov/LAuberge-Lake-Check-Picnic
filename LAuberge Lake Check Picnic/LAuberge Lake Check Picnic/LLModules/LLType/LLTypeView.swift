@@ -8,6 +8,13 @@ import SwiftUI
 
 struct LLTypeView: View {
     @ObservedObject var viewModel: LLRelaxationViewModel
+    
+    let columns = [
+        GridItem(.flexible(), spacing: 20),
+        GridItem(.flexible(), spacing: 20)
+    ]
+    
+    @State private var showCrateType = false
     var body: some View {
         VStack {
             Text("Types")
@@ -18,7 +25,7 @@ struct LLTypeView: View {
                 .padding(.bottom, 10)
                 .background(.pineShade)
             
-            if viewModel.types.isEmpty {
+                if viewModel.types.isEmpty {
                     VStack(spacing: 12) {
                         VStack(spacing: 12) {
                             Text("Create Your First Lake Getaway")
@@ -36,14 +43,24 @@ struct LLTypeView: View {
                     .padding(.horizontal, 16)
                 } else {
                     ScrollView(showsIndicators: false) {
+                        
+                        LazyVGrid(columns: columns, spacing: 12) {
+                            ForEach(viewModel.types, id: \.id) { type in
+                                LLTypeCellView(type: type)
+                            }
+                        }
+                        .padding(.horizontal, 20).padding(.vertical)
+                        .padding(.bottom, 140)
                     }
                 }
+            
+            
             
         }
         .background(.deepPine)
         .overlay(alignment: .bottomTrailing) {
             Button {
-                
+                showCrateType = true
             } label: {
                 Text("+ Create Type")
                     .font(.system(size: 20, weight: .bold))
@@ -53,6 +70,18 @@ struct LLTypeView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 40))
                     .padding(.horizontal, 20)
                     .padding(.bottom, 150)
+            }
+        }
+        .overlay {
+            if showCrateType {
+                Color.black.opacity(0.6).ignoresSafeArea()
+                    .onTapGesture {
+                        showCrateType = false
+                    }
+                LLNewTypeView(viewModel: viewModel) {
+                    showCrateType = false
+                }
+                .padding(.horizontal, 48)
             }
         }
     }

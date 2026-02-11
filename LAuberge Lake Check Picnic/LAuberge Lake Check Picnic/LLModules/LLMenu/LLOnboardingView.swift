@@ -77,9 +77,7 @@ struct LLOnboardingView: View {
             VStack {
                 Button {
                     if count < 2 {
-                        withAnimation {
-                            count += 1
-                        }
+                        count += 1
                     } else {
                         getStartBtnTapped()
                     }

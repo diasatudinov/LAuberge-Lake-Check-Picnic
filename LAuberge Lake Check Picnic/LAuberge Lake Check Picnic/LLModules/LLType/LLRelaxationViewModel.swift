@@ -10,7 +10,16 @@ class LLRelaxationViewModel: ObservableObject {
     // MARK: – Published variables
     
     @Published var types: [TypeModel] = [
-        
+        TypeModel(name: "Picnic by the Lake", mood: "typeImageLL1", items: [], activities: []),
+        TypeModel(name: "River Barbecue", mood: "typeImageLL2", items: [], activities: []),
+        TypeModel(name: "Day with Kids", mood: "typeImageLL3", items: [], activities: []),
+        TypeModel(name: "Kayaking & SUP", mood: "typeImageLL4", items: [], activities: []),
+        TypeModel(name: "Fishing", mood: "typeImageLL5", items: [], activities: []),
+        TypeModel(name: "Overnight by the Water", mood: "typeImageLL6", items: [], activities: []),
+        TypeModel(name: "Yoga on the Shore", mood: "typeImageLL7", items: [], activities: []),
+        TypeModel(name: "Romantic Dinner", mood: "typeImageLL8", items: [], activities: []),
+        TypeModel(name: "Cold Water Swim", mood: "typeImageLL9", items: [], activities: []),
+        TypeModel(name: "Birthday by the Water", mood: "typeImageLL10", items: [], activities: []),
     ] {
         didSet { saveTypes() }
     }
