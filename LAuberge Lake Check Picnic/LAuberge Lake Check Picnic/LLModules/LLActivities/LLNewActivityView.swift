@@ -1,12 +1,18 @@
+//
+//  LLNewActivityView.swift
+//  LAuberge Lake Check Picnic
+//
+//
+import SwiftUI
+
 struct LLNewActivityView: View {
     @ObservedObject var viewModel: LLRelaxationViewModel
     let onNewTypeCreated: () -> ()
     
-    @State private var selectedImage: UIImage?
-    @State private var showingImagePicker = false
     @State private var title: String = ""
-    @State private var quantity: String = ""
-        
+    @State private var participants: String = ""
+    @State private var duration: String = ""
+
     let columns = [
         GridItem(.flexible(), spacing: 10),
         GridItem(.flexible(), spacing: 10),
@@ -19,42 +25,10 @@ struct LLNewActivityView: View {
 
     var body: some View {
         VStack(spacing: 16) {
-            Text("Add item")
+            Text("Add Activity")
                 .font(.system(size: 20, weight: .bold))
                 .foregroundStyle(.linenBase)
                 .frame(maxWidth: .infinity, alignment: .leading)
-            
-            if let uiImage = selectedImage {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: UIScreen.main.bounds.width / 2)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(lineWidth: 1)
-                            .foregroundStyle(.regalAccent)
-                    }
-                    .onTapGesture {
-                        showingImagePicker = true
-                    }
-            } else {
-                Image("imagePlaceholderLL")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 60)
-                    .padding(.vertical, 20).padding(.horizontal, 65)
-                    .background(.pineShade)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(lineWidth: 1)
-                            .foregroundStyle(.regalAccent)
-                    }
-                    .onTapGesture {
-                        showingImagePicker = true
-                    }
-            }
             
             textFiled(title: "Name:") {
                 TextField("Name", text: $title)
@@ -66,8 +40,19 @@ struct LLNewActivityView: View {
                     
             }
             
-            textFiled(title: "Quantity:") {
-                TextField("Quantity", text: $quantity)
+            textFiled(title: "Participants:") {
+                TextField("Participants", text: $participants)
+                    .font(.system(size: 14, weight: .regular))
+                    .keyboardType(.numberPad)
+                    .foregroundStyle(.linenBase)
+                    .padding(.vertical, 5).padding(.horizontal, 8)
+                    .background(.pineShade)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    
+            }
+            
+            textFiled(title: "Duration:") {
+                TextField("Duration", text: $duration)
                     .font(.system(size: 14, weight: .regular))
                     .keyboardType(.numberPad)
                     .foregroundStyle(.linenBase)
@@ -86,9 +71,9 @@ struct LLNewActivityView: View {
             
             Button {
                 if isValidate() {
-                    let item = Item(name: title, quantity: quantity, typesOfRecreation: [], check: false)
-                    viewModel.add(item: item)
-                    viewModel.addItemToSelectedTypes(selectedTypeIDs: selectedTypeIDs, item: item)
+                    let activity = Activity(name: title, participants: participants, duration: duration, typesOfRecreation: [])
+                    viewModel.add(activity: activity)
+                    viewModel.addActivityToSelectedTypes(selectedTypeIDs: selectedTypeIDs, activity: activity)
                     onNewTypeCreated()
                 }
             } label: {
@@ -108,19 +93,10 @@ struct LLNewActivityView: View {
                 .stroke(lineWidth: 1)
                 .foregroundStyle(.regalAccent)
         }
-        .sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
-            ImagePicker(selectedImage: $selectedImage, isPresented: $showingImagePicker)
-        }
-    }
-    
-    func loadImage() {
-        if let selectedImage = selectedImage {
-            print("Selected image size: \(selectedImage.size)")
-        }
     }
     
     func isValidate() -> Bool {
-        !title.isEmpty && !quantity.isEmpty
+        !title.isEmpty && !participants.isEmpty && !duration.isEmpty
     }
     
     @ViewBuilder func textFiled<Content: View>(
@@ -138,5 +114,5 @@ struct LLNewActivityView: View {
 }
 
 #Preview {
-    LLNewItemView(viewModel: LLRelaxationViewModel(), onNewTypeCreated: {})
+    LLNewActivityView(viewModel: LLRelaxationViewModel(), onNewTypeCreated: {})
 }
