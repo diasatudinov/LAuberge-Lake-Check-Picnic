@@ -36,9 +36,9 @@ struct LLMenuView: View {
             case 0:
                 LLTypeView(viewModel: relaxationViewModel)
             case 1:
-                Color.yellow
+                LLItemsView(viewModel: relaxationViewModel)
             case 2:
-                Color.brown
+                LLActivitiesView(viewModel: relaxationViewModel)
             default:
                 Text("default")
             }

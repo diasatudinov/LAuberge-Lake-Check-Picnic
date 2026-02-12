@@ -25,13 +25,55 @@ class LLRelaxationViewModel: ObservableObject {
     }
     
     @Published var items: [Item] = [
+        Item(name: "Towel", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL1"),
+        Item(name: "Picnic blanket", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL2"),
+        Item(name: "Thermos", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL3"),
+        Item(name: "Drinking water", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL4"),
+        Item(name: "Napkins", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL5"),
+        Item(name: "Trash bag", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL6"),
+        Item(name: "Sunscreen", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL7"),
+        Item(name: "Umbrella", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL8"),
+        Item(name: "Ball", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL9"),
+        Item(name: "Portable speaker", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL10"),
+        Item(name: "Knife", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL11"),
+        Item(name: "Cutting board", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL12"),
+        Item(name: "Disposable tableware", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL13"),
+        Item(name: "Grill", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL14"),
+        Item(name: "Charcoal", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL15"),
+        Item(name: "Insect repellent", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL16"),
+        Item(name: "First aid kit", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL17"),
+        Item(name: "Flashlight", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL18"),
+        Item(name: "Float", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL19"),
+        Item(name: "Life jacket", quantity: "", typesOfRecreation: [], check: false, assetImageName: "itemImgLL20"),
+        Item(name: "Test", quantity: "", typesOfRecreation: [], check: false),
+
         
     ] {
         didSet { saveItems() }
     }
     
     @Published var activities: [Activity] = [
+        Activity(name: "Volleyball", participants: "4", duration: "30", typesOfRecreation: []),
+        Activity(name: "Kayaking", participants: "2", duration: "45", typesOfRecreation: []),
+        Activity(name: "SUP", participants: "1", duration: "40", typesOfRecreation: []),
+        Activity(name: "Fishing", participants: "1", duration: "60", typesOfRecreation: []),
+        Activity(name: "Treasure Hunt", participants: "4", duration: "45", typesOfRecreation: []),
+        Activity(name: "Photo Session", participants: "2", duration: "20", typesOfRecreation: []),
+        Activity(name: "Yoga on the Shore", participants: "2", duration: "30", typesOfRecreation: []),
+        Activity(name: "Kite Flying", participants: "2", duration: "25", typesOfRecreation: []),
+        Activity(name: "Water Polo", participants: "6", duration: "40", typesOfRecreation: []),
+        Activity(name: "Raft Building", participants: "4", duration: "60", typesOfRecreation: []),
         
+        Activity(name: "Reading Books", participants: "1", duration: "30", typesOfRecreation: []),
+        Activity(name: "Karaoke", participants: "5", duration: "40", typesOfRecreation: []),
+        Activity(name: "Board Games", participants: "4", duration: "35", typesOfRecreation: []),
+        Activity(name: "Bathing", participants: "2", duration: "20", typesOfRecreation: []),
+        Activity(name: "Shell Collecting", participants: "2", duration: "30", typesOfRecreation: []),
+        Activity(name: "Campfire Singing", participants: "4", duration: "30", typesOfRecreation: []),
+        Activity(name: "Drawing", participants: "1", duration: "25", typesOfRecreation: []),
+        Activity(name: "Bird Watching", participants: "1", duration: "30", typesOfRecreation: []),
+        Activity(name: "Meditation", participants: "1", duration: "20", typesOfRecreation: []),
+        Activity(name: "Swimming", participants: "2", duration: "30", typesOfRecreation: []),
     ] {
         didSet { saveActivities() }
     }
@@ -172,4 +214,80 @@ class LLRelaxationViewModel: ObservableObject {
         activities.remove(at: index)
     }
     
+    func deleteActivityType(type: TypeModel, activity: Activity) {
+        guard let typeIndex = types.firstIndex(of: type) else { return }
+        guard let activityIndex = types[typeIndex].activities.firstIndex(of: activity) else { return }
+        
+        types[typeIndex].activities.remove(at: activityIndex)
+    }
+    
+    func checkItemToggle(type: TypeModel, item: Item) {
+        guard let typeIndex = types.firstIndex(of: type) else { return }
+        guard let itemIndex = types[typeIndex].items.firstIndex(of: item) else { return }
+        types[typeIndex].items[itemIndex].check.toggle()
+    }
+    
+    func deleteItemType(type: TypeModel, item: Item) {
+        guard let typeIndex = types.firstIndex(of: type) else { return }
+        guard let itemIndex = types[typeIndex].items.firstIndex(of: item) else { return }
+        
+        types[typeIndex].items.remove(at: itemIndex)
+    }
+    
+    func addItemType(type: TypeModel, item: Item) {
+        guard let typeIndex = types.firstIndex(of: type) else { return }
+        types[typeIndex].items.append(item)
+    }
+    
+    func addActivityType(type: TypeModel, activity: Activity) {
+        guard let typeIndex = types.firstIndex(of: type) else { return }
+        types[typeIndex].activities.append(activity)
+    }
+    
+    private func getFiveRandomItems() -> [Item] {
+        Array(items.shuffled().prefix(5)).map { item in
+            var updated = item
+            updated.quantity = String(Int.random(in: 1...4))
+            return updated
+        }
+    }
+    
+    func generateChecklistOfItems(type: TypeModel) {
+        guard let typeIndex = types.firstIndex(of: type) else { return }
+        types[typeIndex].items = getFiveRandomItems()
+    }
+    
+    private func getFiveRandomActivities() -> [Activity] {
+        Array(activities.shuffled().prefix(5)).map { item in
+            var updated = item
+            return updated
+        }
+    }
+    
+    func generateChecklistOfActivities(type: TypeModel) {
+        guard let typeIndex = types.firstIndex(of: type) else { return }
+        types[typeIndex].activities = getFiveRandomActivities()
+    }
+    
+    func addItemToSelectedTypes(
+        selectedTypeIDs: Set<UUID>,
+        item: Item
+    ) {
+        for index in types.indices {
+            if selectedTypeIDs.contains(types[index].id) {
+                types[index].items.append(item)
+            }
+        }
+    }
+    
+    func addActivityToSelectedTypes(
+        selectedTypeIDs: Set<UUID>,
+        activity: Activity
+    ) {
+        for index in types.indices {
+            if selectedTypeIDs.contains(types[index].id) {
+                types[index].activities.append(activity)
+            }
+        }
+    }
 }

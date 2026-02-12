@@ -14,7 +14,7 @@ struct LLTypeView: View {
         GridItem(.flexible(), spacing: 20)
     ]
     
-    @State private var showCrateType = false
+    @State private var showCreateType = false
     var body: some View {
         VStack {
             Text("Types")
@@ -46,7 +46,12 @@ struct LLTypeView: View {
                         
                         LazyVGrid(columns: columns, spacing: 12) {
                             ForEach(viewModel.types, id: \.id) { type in
-                                LLTypeCellView(type: type)
+                                NavigationLink {
+                                    LLTypeDetailsView(viewModel: viewModel, type: type)
+                                        .navigationBarBackButtonHidden()
+                                } label: {
+                                    LLTypeCellView(type: type)
+                                }
                             }
                         }
                         .padding(.horizontal, 20).padding(.vertical)
@@ -60,7 +65,7 @@ struct LLTypeView: View {
         .background(.deepPine)
         .overlay(alignment: .bottomTrailing) {
             Button {
-                showCrateType = true
+                showCreateType = true
             } label: {
                 Text("+ Create Type")
                     .font(.system(size: 20, weight: .bold))
@@ -68,18 +73,19 @@ struct LLTypeView: View {
                     .padding(.vertical, 16)
                     .padding(.horizontal, 32)                    .background(.regalAccent)
                     .clipShape(RoundedRectangle(cornerRadius: 40))
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 150)
+                    
             }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 150)
         }
         .overlay {
-            if showCrateType {
+            if showCreateType {
                 Color.black.opacity(0.6).ignoresSafeArea()
                     .onTapGesture {
-                        showCrateType = false
+                        showCreateType = false
                     }
                 LLNewTypeView(viewModel: viewModel) {
-                    showCrateType = false
+                    showCreateType = false
                 }
                 .padding(.horizontal, 48)
             }
