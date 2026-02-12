@@ -10,7 +10,9 @@ import SwiftUI
 struct LAuberge_Lake_Check_PicnicApp: App {
     var body: some Scene {
         WindowGroup {
-            LLMenuView()
+            NavigationStack {
+                LLMenuView()
+            }
         }
     }
 }
